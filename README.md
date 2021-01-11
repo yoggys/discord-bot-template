@@ -12,4 +12,4 @@ Please remember to:
   <img src="https://cdn.discordapp.com/attachments/704387250351243425/798206551856382002/unknown.png" width=500 /></br>
 </p>
 
-- Customize, add new commands or events!
+- Customize or add new commands or events! 🎉
