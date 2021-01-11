@@ -13,3 +13,5 @@ Please remember to:
 </p>
 
 - Customize or add new commands or events! 🎉
+
+- You can run your BOT using `python3 bot.py` command / using editor (e.g. VSC)
