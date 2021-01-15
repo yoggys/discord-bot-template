@@ -48,23 +48,6 @@ async def reload(ctx, extension=None):
 
 @client.command()
 @commands.check(auth)
-async def dedicated(ctx, extension):
-    try:
-        await ctx.message.delete()
-
-        if extension in client.cogs:
-            client.unload_extension(f'cogs.dedicated.{extension}')
-            print(f' <SYSTEM>  {extension} module unloaded!')
-            await ctx.send(f'`<SYSTEM>` "{extension}" module unloaded!')
-        else:
-            client.load_extension(f'cogs.dedicated.{extension}')
-            print(f' <SYSTEM>  {extension} module loaded!')
-            await ctx.send(f'`<SYSTEM>` "{extension}" module loaded!')
-    except Exception as E:
-        print(E) 
-
-@client.command()
-@commands.check(auth)
 async def load(ctx, extension):
     try:
         await ctx.message.delete()
