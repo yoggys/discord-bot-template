@@ -24,7 +24,6 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
-
 @client.command()
 @commands.check(auth)
 async def reload(ctx, extension=None):
@@ -70,9 +69,9 @@ async def unload(ctx, extension):
     except Exception as E:
         print(E) 
 
-"""
-You can !reload/!load/!unload Cogs
-example: !reload Basic
-"""
+
+#You can !reload/!load/!unload Cogs
+#example: !reload Basic
+
 token = read_token()
 client.run(token)
