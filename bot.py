@@ -1,77 +1,73 @@
-import discord
-import os
+from functions.Logger import init_logger, log_info, error_handle
 from discord.ext import commands
+from dotenv import load_dotenv
+from discord import Intents
+import sys
+import os
 
-def auth(ctx):
-    with open('author.txt', 'r') as f:
-        lines = f.readlines()
-        return ctx.author.id == int(lines[1].strip())
+load_dotenv(override=True)
+init_logger()
 
-def read_token():
-    with open('token.txt', 'r') as f:
-        lines = f.readlines()
-        return lines[1].strip()
-
-intents = discord.Intents.default()
-
-#remove if no need
+intents = Intents.default()
 intents.members = True 
 intents.presences = True
+intents.messages = True
 
 client = commands.Bot(command_prefix = '!', intents=intents)
 
+# Load cogs
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
+AUTHOR = int(os.getenv('AUTHOR'))
+def auth(ctx):
+    return ctx.message.author.id == AUTHOR
+
+"""
+    System commands
+    You can !reload/!load/!unload Cogs
+    example: !reload Basic
+"""
 @client.command()
 @commands.check(auth)
 async def reload(ctx, extension=None):
     try:
-        await ctx.message.delete()
-
         if extension == None:
             for filename in os.listdir('./cogs'):
                 if filename.endswith('.py'):
                     client.unload_extension(f'cogs.{filename[:-3]}')
                     client.load_extension(f'cogs.{filename[:-3]}')
-                    print(f' <SYSTEM>  {filename[:-3]} module reloaded!')
+                    log_info(f'{filename[:-3]} module reloaded!')
             await ctx.send(f'`<SYSTEM>` All modules reloaded!')
         else:
             client.unload_extension(f'cogs.{extension}')
             client.load_extension(f'cogs.{extension}')
-            print(f' <SYSTEM>  {extension} module reloaded!')
+            log_info(f'{extension} module reloaded!')
             await ctx.send(f'`<SYSTEM>` "{extension}" module reloaded!')
     except Exception as E:
-        print(E) 
+        error_handle("ERROR", f"INIT - {sys._getframe().f_code.co_name}", E)
 
 @client.command()
 @commands.check(auth)
 async def load(ctx, extension):
     try:
-        await ctx.message.delete()
-        
         client.load_extension(f'cogs.{extension}')
-        print(f' <SYSTEM>  {extension} module loaded!')
+        log_info(f'{extension} module loaded!')
         await ctx.send(f'`<SYSTEM>` "{extension}" module loaded!')
     except Exception as E:
-        print(E) 
+        error_handle("ERROR", f"INIT - {sys._getframe().f_code.co_name}", E)
+
 
 @client.command()
 @commands.check(auth)
 async def unload(ctx, extension):
     try:
-        await ctx.message.delete()
-
         client.unload_extension(f'cogs.{extension}')
-        print(f' <SYSTEM>  {extension} module unloaded!')
+        log_info(f'{extension} module unloaded!')
         await ctx.send(f'`<SYSTEM>` "{extension}" module unloaded!')
     except Exception as E:
-        print(E) 
+        error_handle("ERROR", f"INIT - {sys._getframe().f_code.co_name}", E)
 
-
-#You can !reload/!load/!unload Cogs
-#example: !reload Basic
-
-token = read_token()
-client.run(token)
+TOKEN = os.getenv('TOKEN')
+client.run(TOKEN)
