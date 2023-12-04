@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-class YogBot(commands.Bot):
+class MyBot(commands.Bot):
     def __init__(self) -> None:
         super().__init__(intents=discord.Intents.all())
         self.load_extension("cogs.Base")

@@ -1,7 +1,7 @@
+import discord
 from discord.ext import commands, tasks
 
 from utils.client import MyBot
-import discord
 
 
 class Base(commands.Cog):
